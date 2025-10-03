@@ -2,7 +2,8 @@ name = "AI Avatar Talking by Vista"
 client_id = "9a3ccdfb354e6d1741a4db9dbcbca2cf"
 scopes = "read_products,write_products"
 application_url = "https://curly-space-journey-g4v4jjwpv4p4fg66-5173.app.github.dev"
+store = "vistabylara.myshopify.com"
+
 redirect_url_allowlist = [
   "https://curly-space-journey-g4v4jjwpv4p4fg66-5173.app.github.dev/auth/callback"
 ]
-store = "vistabylara.myshopify.com"
