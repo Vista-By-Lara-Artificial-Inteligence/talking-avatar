@@ -1,0 +1,25 @@
+mkdir -p app/routes/api
+cat > app/routes/api/render.tsx <<'TSX'
+import type { ActionFunctionArgs } from "@remix-run/node";
+import { json } from "@remix-run/node";
+
+export const action = async ({ request }: ActionFunctionArgs) => {
+  let body: any = {};
+  try {
+    const raw = await request.text();
+    body = raw ? JSON.parse(raw) : {};
+  } catch {
+    return json({ error: "Invalid JSON" }, { status: 400 });
+  }
+
+  const text = (body.text ?? "").toString().trim();
+  if (!text) {
+    return json({ error: "Text is required" }, { status: 400 });
+  }
+
+  // TODO: Replace with real render pipeline call (D-ID/ElevenLabs/etc.)
+  return json({
+    videoUrl: "https://cdn.pixabay.com/video/2023/06/04/168493-834524516_tiny.mp4"
+  });
+};
+TSX
