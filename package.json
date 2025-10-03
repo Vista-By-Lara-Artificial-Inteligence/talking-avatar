@@ -1,0 +1,25 @@
+{
+  "name": "talking-avatar",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "remix build",
+    "start": "vite preview"
+  },
+  "dependencies": {
+    "@remix-run/node": "^2.4.0",
+    "@remix-run/react": "^2.4.0",
+    "@shopify/shopify-api": "^9.7.2",
+    "@shopify/shopify-app-remix": "^2.8.2",
+    "dotenv": "^16.6.1",
+    "express": "^5.1.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "vite-tsconfig-paths": "^5.1.4"
+  },
+  "devDependencies": {
+    "@remix-run/dev": "^2.4.0",
+    "typescript": "^5.2.2",
+    "vite": "^5.1.0"
+  }
+}
