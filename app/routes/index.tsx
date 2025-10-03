@@ -1,60 +1,50 @@
-// app/routes/index.tsx
-
+cat > app/routes/index.tsx <<'TSX'
 import { useState } from "react";
-import type { MetaFunction } from "@remix-run/node";
-import { json } from "@remix-run/node";
 import { useFetcher } from "@remix-run/react";
-
-export const meta: MetaFunction = () => {
-  return [
-    { title: "AI Avatar Talking by Vista" },
-    { name: "viewport", content: "width=device-width,initial-scale=1" },
-  ];
-};
 
 export default function Index() {
   const fetcher = useFetcher();
-  const [previewUrl, setPreviewUrl] = useState("");
   const [text, setText] = useState("");
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setPreviewUrl(URL.createObjectURL(file));
-    }
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const submit = (e: React.FormEvent) => {
     e.preventDefault();
     const form = e.target as HTMLFormElement;
-    fetcher.submit(form, { method: "post", encType: "multipart/form-data", action: "/api/render" });
+    fetcher.submit(form, { method: "post", encType: "application/json", action: "/api/render" });
   };
 
   return (
-    <main style={{ fontFamily: "sans-serif", padding: 20, maxWidth: 600, margin: "auto" }}>
-      <h1>AI Avatar Talking by Vista</h1>
-      <form method="post" onSubmit={handleSubmit} encType="multipart/form-data">
-        <label>
-          Upload Avatar Image:
-          <input type="file" name="avatar" accept="image/*" onChange={handleFileChange} required />
-        </label>
-        {previewUrl && <img src={previewUrl} alt="Avatar Preview" style={{ marginTop: 10, maxWidth: "100%" }} />}
-        <label style={{ display: "block", marginTop: 20 }}>
-          Text to Speak:
-          <textarea name="text" value={text} onChange={(e) => setText(e.target.value)} rows={4} style={{ width: "100%" }} required />
-        </label>
-        <button type="submit" style={{ marginTop: 20, padding: "10px 20px" }}>
-          Generate Talking Avatar
+    <main style={{ padding: 20, maxWidth: 800, margin: "0 auto", fontFamily: "system-ui, sans-serif" }}>
+      <h1 style={{ marginBottom: 8 }}>AI Avatar Talking by Vista</h1>
+      <p style={{ color: "#555", marginBottom: 24 }}>Enter text and generate a talking avatar preview.</p>
+
+      <form onSubmit={submit}>
+        <textarea
+          name="text"
+          rows={4}
+          required
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          placeholder="Type what you want the avatar to say..."
+          style={{ width: "100%", padding: 12, border: "1px solid #ccc", borderRadius: 6 }}
+        />
+        <button
+          type="submit"
+          style={{ marginTop: 12, padding: "10px 16px", borderRadius: 6, border: "none", background: "#5c6ac4", color: "#fff", cursor: "pointer" }}
+          disabled={fetcher.state !== "idle"}
+        >
+          {fetcher.state !== "idle" ? "Generating..." : "Generate"}
         </button>
       </form>
 
-      {fetcher.state === "submitting" && <p>🌀 Generating...</p>}
+      {fetcher.state === "submitting" && <p style={{ marginTop: 12 }}>Working...</p>}
       {fetcher.data?.videoUrl && (
-        <div style={{ marginTop: 30 }}>
-          <h2>Preview:</h2>
-          <video src={fetcher.data.videoUrl} controls autoPlay style={{ maxWidth: "100%" }} />
-        </div>
+        <section style={{ marginTop: 24 }}>
+          <h3>Preview</h3>
+          <video src={fetcher.data.videoUrl} controls autoPlay style={{ width: "100%", borderRadius: 8 }} />
+        </section>
       )}
     </main>
   );
 }
+TSX
