@@ -1,29 +1,17 @@
 // app/root.tsx
-import * as React from "react";
-import type { LinksFunction, HeadersFunction, MetaFunction } from "@remix-run/node";
 import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration } from "@remix-run/react";
 
-export const headers: HeadersFunction = () => {
-  return {
-    /**
-     * Allow the Shopify Admin to frame the embedded app.
-     * DO NOT set `X-Frame-Options: SAMEORIGIN` anywhere.
-     */
-    "Content-Security-Policy":
-      "frame-ancestors https://*.myshopify.com https://admin.shopify.com;",
-  };
-};
-
-export const meta: MetaFunction = () => ([
-  { charSet: "utf-8" },
-  { name: "viewport", content: "width=device-width, initial-scale=1" },
-  { title: "AI Avatar Talking by Vista" },
-]);
-
-export const links: LinksFunction = () => [
-  // Example: global stylesheet if you have one.
-  // { rel: "stylesheet", href: styles },
-];
+export const headers = () => ({
+  "Content-Security-Policy": [
+    "default-src 'self'",
+    "img-src 'self' data: blob: https: http:",
+    "media-src 'self' data: blob: https: http:",
+    "script-src 'self' 'unsafe-inline'", // Remix inline runtime
+    "style-src 'self' 'unsafe-inline'",
+    "connect-src 'self' https: http:",
+    "frame-ancestors https://*.myshopify.com https://admin.shopify.com",
+  ].join("; "),
+});
 
 export default function App() {
   return (
@@ -32,8 +20,7 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body>
-        {/* Your layout shell could go here if needed */}
+      <body style={{ margin: 0, fontFamily: "ui-sans-serif, system-ui" }}>
         <Outlet />
         <ScrollRestoration />
         <Scripts />
